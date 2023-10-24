@@ -1,0 +1,3 @@
+[submodule "src/modules/lol-personal-db"]
+	path = src/modules/lol-personal-db
+	url = https://github.com/kd0010/lol-personal-db
