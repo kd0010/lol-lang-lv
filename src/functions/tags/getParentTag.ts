@@ -1,4 +1,4 @@
-import { SelfClosingTags } from './SelfClosingTags'
+import { SelfClosingTags } from '../../constants/SelfClosingTags'
 import { getPreviousTag } from './getPreviousTag'
 import { indexOfTag } from './indexOfTag'
 import { lastIndexOfTag } from './lastIndexOfTag'
