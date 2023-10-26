@@ -42,9 +42,8 @@ export function getRepeatingTextsThroughTags(
   }
 
   for (const tagName of uniqueTags) {
-    console.log('\ntagName', tagName) // TEMP
+    // console.log('\ntagName', tagName) // TEMPDEV
 
-    // for (const entryId in Object.fromEntries(Object.entries(entriesWithTags).slice(500, 525))) { // TEMP
     for (const entryId in entriesWithTags) {
       const entryText = entriesWithTags[entryId]!
       // there could be more than 1 tag of this `tagName`.
@@ -76,8 +75,6 @@ export function getRepeatingTextsThroughTags(
             const parentTagName = getParentTag(entryText, currentTag, currentOpeningTagIdx)
 
             if (parentTagName == null) {
-              // TEMP
-              // recordText(entryId, currentText, currentTextCount)
               repeatingTexts[currentText] = {
                 text: currentText,
                 occurances: currentTextCount,
@@ -105,8 +102,6 @@ export function getRepeatingTextsThroughTags(
             // This clause would occur in the case that
             // we went parent element, but found out that it doesn't repeat.
             // Then we just save previous text.
-            // TEMP
-            // recordText(entryId, previousText, previousTextCount)
             repeatingTexts[previousText] = {
               text: previousText,
               occurances: previousTextCount,

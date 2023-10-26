@@ -19,14 +19,11 @@ export function getDeepestTags(
     const tagIndices = getTagIndices(text, tagName)
     for (const [openingTagIdx, closingTagIdx] of tagIndices) {
       if (closingTagIdx == null) continue
-      // console.log('tagName', tagName) // TEMP
-      // console.log('closingTagIdx', closingTagIdx) // TEMP
 
       // Just make sure that between opening and closing tag indices
       // there are no other tag indices for provided text.
       let isTagDeepest = true
       for (const [openingTagIdx2, closingTagIdx2] of uniqueTagIndices) {
-        // console.log('openingTagIdx2', openingTagIdx2) // TEMP
         if (closingTagIdx2 == null) continue // such tags are ignored
 
         if (openingTagIdx2 > openingTagIdx && openingTagIdx2 < closingTagIdx) {
