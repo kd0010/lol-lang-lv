@@ -11,7 +11,7 @@ export function getUniqueTexts(
   let foundTexts: string[] = []
 
   for (const text of texts) {
-    const matches = text.match(regex)
+    const matches = text.match(new RegExp(regex, 'g'))
     if (matches == null) continue
     foundTexts.push(...matches)
   }

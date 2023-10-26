@@ -8,23 +8,29 @@ import {
 } from '../../constants/regexes'
 import { getTags } from '../tags/getTags'
 
-export function filterUniqueTexts(
-  uniqueTexts: {[text: string]: any},
-): {[text: string]: number} {
-  const filteredUniqueTexts: {[text: string]: number} = {}
+export function filterUniqueTexts<T>(
+  uniqueTexts: {[text: string]: T},
+): [{[text: string]: T}, {[text: string]: T}] {
+  const cleanUniqueTexts: {[text: string]: T} = {}
+  const dirtyUniqueTexts: {[text: string]: T} = {}
   const delChar = ''
+  const _atVariableRegex = new RegExp(atVariableRegex, 'g')
+  const _percentIVariableRegex = new RegExp(percentIVariableRegex, 'g')
+  const _variableInDoubleCurlyBracketsRegex = new RegExp(variableInDoubleCurlyBracketsRegex, 'g')
+  const _dollarSignVariableRegex = new RegExp(dollarSignVariableRegex, 'g')
+  const _calcTagWithContentsRegex = new RegExp(calcTagWithContentsRegex, 'g')
 
-  for (const originalText in uniqueTexts) {
-    const originalValue = uniqueTexts[originalText]!
-    let filteredText = originalText
+  for (const uniqueText in uniqueTexts) {
+    const value = uniqueTexts[uniqueText]!
+    let filteredText = uniqueText
     
     // Delete variable texts
-    filteredText = filteredText.replaceAll(atVariableRegex, delChar)
-    filteredText = filteredText.replaceAll(percentIVariableRegex, delChar)
-    filteredText = filteredText.replaceAll(variableInDoubleCurlyBracketsRegex, delChar)
-    filteredText = filteredText.replaceAll(dollarSignVariableRegex, delChar)
+    filteredText = filteredText.replaceAll(_atVariableRegex, delChar)
+    filteredText = filteredText.replaceAll(_percentIVariableRegex, delChar)
+    filteredText = filteredText.replaceAll(_variableInDoubleCurlyBracketsRegex, delChar)
+    filteredText = filteredText.replaceAll(_dollarSignVariableRegex, delChar)
     // before tag removal, delete all calc tags and their content
-    filteredText = filteredText.replaceAll(calcTagWithContentsRegex, delChar)
+    filteredText = filteredText.replaceAll(_calcTagWithContentsRegex, delChar)
 
     // Delete tags
     const tagTexts = getTags(filteredText, {
@@ -38,9 +44,9 @@ export function filterUniqueTexts(
     // Check whether it still has any real content left
     const hasWords = wordsRegex.test(filteredText)
 
-    if (!hasWords) continue
-    filteredUniqueTexts[originalText] = originalValue
+    if (hasWords) cleanUniqueTexts[uniqueText] = value
+    else dirtyUniqueTexts[uniqueText] = value
   }
 
-  return filteredUniqueTexts
+  return [cleanUniqueTexts, dirtyUniqueTexts]
 }

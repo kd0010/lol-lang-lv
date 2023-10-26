@@ -1,4 +1,4 @@
-import { entryTexts } from '../../constants/entries'
+import { entryTexts } from '../../constants/entryTexts'
 import {
   atVariableRegex,
   variableInDoubleCurlyBracketsRegex,
