@@ -1,16 +1,16 @@
-export const literatureCharsRegex =     /[a-zA-Z\s\d'\.\-–—]+?/g
-export const nonLiteratureCharsRegex = /[^a-zA-Z\s\d'\.\-–—]+?/g
-export const letterCharsRegex =     /[a-zA-Z]+?/g
-export const nonLetterCharsRegex = /[^a-zA-Z]+?/g
-export const wordsRegex =           /[a-zA-Z]{2,}?/g
+export const literatureCharsRegex =     /[a-zA-Z\s\d'\.\-–—]+?/
+export const nonLiteratureCharsRegex = /[^a-zA-Z\s\d'\.\-–—]+?/
+export const letterCharsRegex =     /[a-zA-Z]+?/
+export const nonLetterCharsRegex = /[^a-zA-Z]+?/
+export const wordsRegex =           /[a-zA-Z]{2,}?/
 
-export const htmlCharacterEntityRegex = /&[\w]+?;/g
-export const textInSquareBracketsRegex = /\[[\w\s\+\-]+?\]/g
+export const htmlCharacterEntityRegex = /&[\w]+?;/
+export const textInSquareBracketsRegex = /\[[\w\s\+\-]+?\]/
 
-export const atVariableRegex = /@[\w\W]+?@/g
-export const percentIVariableRegex = /%i:[\w\W]+?%/g
-export const variableInDoubleCurlyBracketsRegex = /\{\{[\w\W]+?\}\}/g
-export const dollarSignVariableRegex = /\$[\w\W]+?\$/g
-export const calcTagWithContentsRegex = /<calc>[\w\W]+?<\/calc>/g
+export const atVariableRegex = /@[\w\W]+?@/
+export const percentIVariableRegex = /%i:[\w\W]+?%/
+export const variableInDoubleCurlyBracketsRegex = /\{\{[\w\W]+?\}\}/
+export const dollarSignVariableRegex = /\$[\w\W]+?\$/
+export const calcTagWithContentsRegex = /<calc>[\w\W]+?<\/calc>/
 
-export const getOpeningTagRegex = (tagName: string) => new RegExp(`<${tagName}[ >]{1}`, 'g')
+export const getOpeningTagRegex = (tagName: string) => new RegExp(`<${tagName}[ >]{1}`)
