@@ -9,13 +9,13 @@ import {
 import { getTags } from '../tags/getTags'
 
 export function filterUniqueTexts(
-  uniqueTexts: {[text: string]: number},
+  uniqueTexts: {[text: string]: any},
 ): {[text: string]: number} {
   const filteredUniqueTexts: {[text: string]: number} = {}
   const delChar = ''
 
   for (const originalText in uniqueTexts) {
-    const textCount = uniqueTexts[originalText]!
+    const originalValue = uniqueTexts[originalText]!
     let filteredText = originalText
     
     // Delete variable texts
@@ -39,7 +39,7 @@ export function filterUniqueTexts(
     const hasWords = wordsRegex.test(filteredText)
 
     if (!hasWords) continue
-    filteredUniqueTexts[originalText] = textCount
+    filteredUniqueTexts[originalText] = originalValue
   }
 
   return filteredUniqueTexts

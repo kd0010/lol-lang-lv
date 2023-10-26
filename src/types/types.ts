@@ -1,9 +1,19 @@
-export interface MainStringtable {
+export interface Stringtable {
   RMAG: string
   version: string
-  entries: MainStringtableEntries
+  entries: StringtableEntries
 }
 
-export interface MainStringtableEntries {
+export interface StringtableEntries {
   [entryId: string]: string
+}
+
+export interface AnalyzedText {
+  text: string
+  occurances: number
+  occursInIds: string[]
+}
+
+export interface AnalyzedTexts {
+  [text: string]: AnalyzedText
 }
