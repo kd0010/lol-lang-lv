@@ -2,8 +2,9 @@ import { expect, test } from 'vitest'
 import { getClosingTagIndex } from './getClosingTagIndex'
 
 test('does the thing', () => {
-  //                    |0123456789-123456789-123456789-123456789-123456789-123456789-123456789
+  //                    |0123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789
   const proper1 =       '<div>   <div>  <div></div>  </div>   </div>'
+  const proper2 =       '<div> <div></div>   <div id="containts-something"> <div></div> <span></span> </div>   </div>'
   
   //                    |0123456789-123456789-123456789-123456789-123456789-123456789-123456789
   const irregular1 =    '<div> 1+1 > 0  <div> 0 < 3 <div></div> this<->that </div>   </div>'
@@ -25,6 +26,9 @@ test('does the thing', () => {
   expect(getClosingTagIndex(proper1, 'div', 6)).toBe(28) // little early
   expect(getClosingTagIndex(proper1, 'div', 8)).toBe(28) // exact
   expect(getClosingTagIndex(proper1, 'div', 10)).toBe(20) // little late (takes next)
+  expect(getClosingTagIndex(proper2, 'span')).toBe(69)
+  expect(getClosingTagIndex(proper2, 'div', 6)).toBe(11)
+  expect(getClosingTagIndex(proper2, 'div', 19)).toBe(77)
 
   expect(getClosingTagIndex(irregular1, 'div', 10)).toBe(51) // tageting second div
   expect(getClosingTagIndex(withoutParent, 'div', 0)).toBe(5)

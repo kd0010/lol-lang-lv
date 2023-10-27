@@ -1,3 +1,5 @@
+import { letterCharsRegex } from '../../constants/regexes'
+
 /**
  * Takes a string and finds the next **opening** tag
  * from `position`. Ignores closing tags.
@@ -12,11 +14,18 @@ export function getNextTag(
   let tag = ''
   for (let i = position; i < contents.length; i++) {
     const letter = contents[i]
-    if (letter == '<') {
+    if (letter == '<' && doRecordTag) {
+      // start again
+      tag = ''
       doRecordTag = true
+    } else if (letter == '<') {
+      doRecordTag = true
+    } else if (letter == '>') {
+      if (letterCharsRegex.test(tag)) return tag
     } else if (doRecordTag) {
-      if (letter == ' ' || letter == '>') return tag
-      if (letter == '/') {
+      if (letter == ' ') {
+        doRecordTag = false // stop recording once gotten to attributes
+      } else if (letter == '/') {
         doRecordTag = false // ignore closing tags
         tag = ''
       } else {

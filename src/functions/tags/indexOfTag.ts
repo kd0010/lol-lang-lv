@@ -12,7 +12,7 @@ export function indexOfTag(
   let targetOpeningTagIndex = -1
   targetOpeningTagIndex = contents[fnToUse](openingBracket + targetTagName + '>', position)
   if (targetOpeningTagIndex == -1 && !options.findClosingTag) {
-    contents[fnToUse](openingBracket + targetTagName + ' ', position)
+    targetOpeningTagIndex = contents[fnToUse](openingBracket + targetTagName + ' ', position)
   }
 
   return targetOpeningTagIndex
