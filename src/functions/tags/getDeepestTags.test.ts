@@ -8,6 +8,8 @@ test('does the thing', () => {
   
   //                    |0123456789-123456789-123456789-123456789-123456789-123456789-123456789
   const irregular1 =    '<div> 1+1 > 0  <div> 0 < 3 <div></div> this<->that </div>   </div>'
+  const irregular2 = `_
+<div> <p>one</p> <p>oh, a fish! <><  and another!! ><>  <image>  brrrr <><><><><><<<<>>>>  </p> </div>`
   const withoutParent = '<div></div> <div></div> <div></div>'
 
   //                    |0123456789-123456789-123456789-123456789-123456789-123456789-123456789
@@ -33,6 +35,10 @@ test('does the thing', () => {
 
   expect(getDeepestTags(irregular1)).toStrictEqual([
     {tagName: 'div', openingTagIndex: 27, closingTagIndex: 32},
+  ] satisfies DeepestTag[])
+  expect(getDeepestTags(irregular2)).toStrictEqual([
+    {tagName: 'p', openingTagIndex: 8, closingTagIndex: 14},
+    {tagName: 'p', openingTagIndex: 19, closingTagIndex: 93},
   ] satisfies DeepestTag[])
   expect(getDeepestTags(withoutParent)).toStrictEqual([
     {tagName: 'div', openingTagIndex: 0, closingTagIndex: 5},

@@ -9,6 +9,8 @@ test('does the thing', () => {
   
   const irregular1 = `_
 <div> 1+1 > 0  <div> 0 < 3 <aside></aside> this<->that </div>   </div>`
+  const irregular2 = `_
+<div> <p>one</p> <p>oh, a fish! <><  and another!! ><>  brrrr <><><><><><<<<>>>> <image>  </p> </div>`
   const withoutParent = `_
 <div></div> <span></span> <a></a>`
 
@@ -38,6 +40,10 @@ test('does the thing', () => {
 
   expect(indexOfTag(irregular1, 'aside')).toBe(29)
   expect(indexOfTag(irregular1, 'div', 3)).toBe(17)
+  //
+  expect(indexOfTag(irregular2, 'p', 3)).toBe(8)
+  expect(indexOfTag(irregular2, 'p', 9)).toBe(19)
+  expect(indexOfTag(irregular2, 'image')).toBe(83)
   //
   expect(indexOfTag(withoutParent, 'span')).toBe(14)
   

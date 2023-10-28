@@ -8,6 +8,8 @@ test('does the thing', () => {
   
   //                    |0123456789-123456789-123456789-123456789-123456789-123456789-123456789
   const irregular1 =    '<div> 1+1 > 0  <div> 0 < 3 <div></div> this<->that </div>   </div>'
+  const irregular2 = `_
+<div> <p>one</p> <p>oh, a fish! <><  and another!! ><>  <image>  brrrr <><><><><><<<<>>>>  </p> </div>`
   const withoutParent = '<div></div> <div></div> <div></div>'
 
   //                    |0123456789-123456789-123456789-123456789-123456789-123456789-123456789
@@ -31,6 +33,8 @@ test('does the thing', () => {
   expect(getClosingTagIndex(proper2, 'div', 19)).toBe(77)
 
   expect(getClosingTagIndex(irregular1, 'div', 10)).toBe(51) // tageting second div
+  expect(getClosingTagIndex(irregular2, 'p')).toBe(14)
+  expect(getClosingTagIndex(irregular2, 'p', 15)).toBe(93)
   expect(getClosingTagIndex(withoutParent, 'div', 0)).toBe(5)
   expect(getClosingTagIndex(withoutParent, 'div', 12)).toBe(17)
   expect(getClosingTagIndex(withoutParent, 'div', 13)).toBe(29) // very next one (index 13 jumps exactly 1)

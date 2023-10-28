@@ -2,7 +2,7 @@ export function indexOfTag(
   contents: string,
   /** e.g. "div", "span" etc. (no brackets) */
   targetTagName: string,
-  position: number=0,
+  position?: number,
   options: IndexOfTagOptions={},
 ): number {
   const fnToUse = options.reverse ? 'lastIndexOf' : 'indexOf'
