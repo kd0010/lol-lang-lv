@@ -1,7 +1,7 @@
 import { entryTextsWithTags } from '../../constants/entryTextsWithTags'
 import { getTags } from '../tags/getTags'
 
-export function getTagCounts(): {[tag: string]: number} {
+export function getEntryTagCounts(): {[tag: string]: number} {
   const tagCounts: {[tag: string]: number} = {}
   
   for (const entryText of entryTextsWithTags) {

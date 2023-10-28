@@ -12,7 +12,7 @@ import { getUniqueTexts } from './getUniqueTexts'
  * These can later be used to determine what texts to ignore/delete
  * for translation purposes.
  */
-export function getVariableTexts() {
+export function getEntryVariableTexts() {
   const atVariableTexts = getUniqueTexts(entryTexts, atVariableRegex)
   const percentIVariableTexts = getUniqueTexts(entryTexts, percentIVariableRegex)
   const variableInDoubleCurlyBracketsTexts = getUniqueTexts(entryTexts, variableInDoubleCurlyBracketsRegex)

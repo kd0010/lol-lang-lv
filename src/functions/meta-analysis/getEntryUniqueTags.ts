@@ -1,7 +1,7 @@
 import { entryTextsWithTags } from '../../constants/entryTextsWithTags'
 import { getTags } from '../tags/getTags'
 
-export function getUniqueTags(): string[] {
+export function getEntryUniqueTags(): string[] {
   const allTags: string[] = []
   
   for (const entryText of entryTextsWithTags) {

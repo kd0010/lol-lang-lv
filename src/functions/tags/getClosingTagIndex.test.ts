@@ -5,6 +5,9 @@ test('does the thing', () => {
   //                    |0123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789
   const proper1 =       '<div>   <div>  <div></div>  </div>   </div>'
   const proper2 =       '<div> <div></div>   <div id="containts-something"> <div></div> <span></span> </div>   </div>'
+
+  const tricky1 = `_
+<div id='outer-div'>   <wrapper> <div id="inner-div"></div> </wrapper>   </div>`
   
   //                    |0123456789-123456789-123456789-123456789-123456789-123456789-123456789
   const irregular1 =    '<div> 1+1 > 0  <div> 0 < 3 <div></div> this<->that </div>   </div>'
@@ -31,6 +34,9 @@ test('does the thing', () => {
   expect(getClosingTagIndex(proper2, 'span')).toBe(69)
   expect(getClosingTagIndex(proper2, 'div', 6)).toBe(11)
   expect(getClosingTagIndex(proper2, 'div', 19)).toBe(77)
+
+  expect(getClosingTagIndex(tricky1, 'div')).toBe(75)
+  expect(getClosingTagIndex(tricky1, 'div', 10)).toBe(55)
 
   expect(getClosingTagIndex(irregular1, 'div', 10)).toBe(51) // tageting second div
   expect(getClosingTagIndex(irregular2, 'p')).toBe(14)
