@@ -9,8 +9,7 @@ export function getDeepestTags(
   text: string,
 ): DeepestTag[] {
   const deepestTags: DeepestTag[] = []
-  const tags = getTags(text)
-  const uniqueTags = [...new Set(tags)]
+  const uniqueTags = getTags(text, {includeUniqueOnly: true})
   const uniqueTagIndices = uniqueTags.map(tagName => getTagIndices(text, tagName)).flat()
 
   for (const tagName of uniqueTags) {

@@ -1,16 +1,19 @@
+import { letterCharsRegex } from '../../constants/regexes'
+
 export function getTags(
   text: string,
-  options: ExtractTagsOptions={},
+  options: GetTagsOptions={},
 ): string[] {
   let {
     includeAttributes=false,
     includeEndingTags=false,
     includeTagBrackets=false,
+    includeUniqueOnly=false,
   } = options
   
-  const tags: string[] = []
+  let tags: string[] = []
   let currentTag = ''
-  let isRecordingTag = false
+  let doRecordTag = false
   let previousLetter = ''
   const addLetter = (letter: string) => {
     if (letter == '<' || letter == '>' || letter == '/') {
@@ -20,34 +23,39 @@ export function getTags(
     }
   }
   for (const letter of text) {
-    if (letter == '<') {
+    if (letter == '<' && doRecordTag) {
+      // start again, since 2nd opening bracket encounered
+      currentTag = '<'
+    } else if (letter == '<') {
       addLetter(letter)
-      isRecordingTag = true
+      doRecordTag = true
     } else if (
-      (isRecordingTag && letter == '>') ||
-      (isRecordingTag && !includeAttributes && letter == ' ')
+      (doRecordTag && letter == '>') ||
+      (doRecordTag && !includeAttributes && letter == ' ')
     ) {
       // end recording a tag clause
       if (letter != ' ') addLetter(letter) // do not end on space character
       else addLetter('>') // replace that space with closing tag
-      isRecordingTag = false
-      tags.push(currentTag)
+      if (letterCharsRegex.test(currentTag)) tags.push(currentTag)
+      doRecordTag = false
       currentTag = ''
     } else if (!includeEndingTags && previousLetter == '<' && letter == '/') {
       // clause to forget about closing tags
-      isRecordingTag = false
+      doRecordTag = false
       currentTag = ''
-    } else if (isRecordingTag) {
+    } else if (doRecordTag) {
       addLetter(letter)
     }
 
     previousLetter = letter
   }
+  if (includeUniqueOnly) tags = [...new Set(tags)]
   return tags
 }
 
-export interface ExtractTagsOptions {
+export interface GetTagsOptions {
   includeAttributes?: boolean
   includeEndingTags?: boolean
   includeTagBrackets?: boolean
+  includeUniqueOnly?: boolean
 }
