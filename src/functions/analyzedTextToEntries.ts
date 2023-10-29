@@ -1,5 +1,12 @@
 import { AnalyzedTexts, StringtableEntries } from '../types/types'
 
+/**
+ * Turns `AnalyzedTexts` back to original `StringtableEntries` form.
+ * 
+ * For example, `getRepeatingTextsThroughTags` filters out non-repeating
+ * texts, but returns `AnalyzedTexts`. With this function you may get
+ * back original entry form, now with filtered entries.
+ */
 export function analyzedTextsToEntries(
   analyzedTexts: AnalyzedTexts
 ): StringtableEntries {
