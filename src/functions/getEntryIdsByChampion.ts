@@ -2,6 +2,10 @@ import { isTftEntryIdPart } from '../constants/TftEntryIdParts'
 import { entries } from '../constants/entries'
 import { ChampionId } from 'lol-constants'
 
+// TEMP all those generate_tip, stat_stone,
+// skin_whatever have to be meta-analyzed and then through that
+// the entry IDs have to be gotten, otherwise entryId.includes('vi')
+// returns also viktor, some_kind_of_behaVIor for kogmaw etc.
 export function getEntryIdsByChampion(
   championId: ChampionId,
   {

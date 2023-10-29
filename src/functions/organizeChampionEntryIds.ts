@@ -1,4 +1,10 @@
 import { ChampionId } from 'lol-constants'
+import {
+  abilities,
+  eternalsEntryIdPart,
+  getAbilityEntryIdParts,
+  skinEntryIdPart,
+} from '../constants/championOrganizing'
 
 export function organizeChampionEntryIds(
   championId: ChampionId,
@@ -16,36 +22,24 @@ export function organizeChampionEntryIds(
     misc: [],
   }
 
-  let lowercaseChampId = championId.toLowerCase()
-
-  const abilities = ['P', 'Q', 'W', 'E', 'R'] as const
-  const abilityParts: {[ability: string]: string} = {
-    P: `_${lowercaseChampId}passive`,
-    Q: `_${lowercaseChampId}q`,
-    W: `_${lowercaseChampId}e`,
-    E: `_${lowercaseChampId}w`,
-    R: `_${lowercaseChampId}r`,
-  }
-  const skinPart = 'skin'
-  const eternalsPart = 'stat_stone'
+  const abilityParts = getAbilityEntryIdParts(championId)
 
   for (const entryId of entryIds) {
     const entryIdParts = entryId.split('_')
 
     // abilities, eternals and tft use entryId string itself unlike other stuff
     let countedAsAbilityId = false
-    let ability: typeof abilities[keyof typeof abilities]
-    for (ability of abilities) {
-      if (entryId.includes(abilityParts[ability]!)) {
+    for (const ability of abilities) {
+      if (entryId.includes(abilityParts[ability])) {
         organized[ability].push(entryId)
         countedAsAbilityId = true
       }
     }
     if (countedAsAbilityId) continue
 
-    if (entryId.includes(eternalsPart)) {
+    if (entryId.includes(eternalsEntryIdPart)) {
       organized.eternals.push(entryId)
-    } else if (entryIdParts.includes(skinPart)) {
+    } else if (entryIdParts.includes(skinEntryIdPart)) {
       organized.skins.push(entryId)
     } else if (
       (

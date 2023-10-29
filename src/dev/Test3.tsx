@@ -13,6 +13,10 @@ import { repeatingTexts4 } from './repeatingTexts4'
 import { getEntryUniqueTags } from '../functions/meta-analysis/getEntryUniqueTags'
 import { getUniqueTextsThroughTags } from '../functions/the-real-guns/getUniqueTextsThroughTags'
 import { uniqueTexts1 } from './uniqueTexts1'
+import { getEntryIdsForChampions } from '../functions/meta-analysis/getEntryIdsForChampions'
+import { arrToObj } from 'rift-js-utils/array'
+import { organizeChampionEntryIds } from '../functions/organizeChampionEntryIds'
+import { getEntryIdsByChampion } from '../functions/getEntryIdsByChampion'
 
 interface Props {
   
@@ -27,6 +31,10 @@ export const Test3: FunctionComponent<Props> = ({
   //
   //
 
+  const vi = organizeChampionEntryIds('Vi', getEntryIdsByChampion('Vi'))
+  console.log('vi', vi) // TEMP
+  if ((() => true)()) return // TEMP
+
   // const repeatingTexts1 = getRepeatingTextsThroughTags(entriesWithTags)
   // const repeatingTexts2 = getRepeatingTextsThroughTags(analyzedTextsToEntries(repeatingTexts1))
 
@@ -37,15 +45,15 @@ export const Test3: FunctionComponent<Props> = ({
 
 
   const [tltableRepeatingTexts1] = filterTranslateableTexts(repeatingTexts1, {filterTftTexts: true})
-  const [tltableRepeatingTexts2] = filterTranslateableTexts(repeatingTexts2, {filterTftTexts: true})
+  // const [tltableRepeatingTexts2] = filterTranslateableTexts(repeatingTexts2, {filterTftTexts: true})
 
-  console.log({
-    tlatableRepeatingTexts1: Object.keys(tltableRepeatingTexts1).length,
-    tlatableRepeatingTexts2: Object.keys(tltableRepeatingTexts2).length,
-  }) // TEMP
+  // console.log({
+  //   tlatableRepeatingTexts1: Object.keys(tltableRepeatingTexts1).length,
+  //   // tlatableRepeatingTexts2: Object.keys(tltableRepeatingTexts2).length,
+  // }) // TEMP
 
-  console.log('tlatableRepeatingTexts1', tltableRepeatingTexts1) // TEMP
-  console.log('tlatableRepeatingTexts2', tltableRepeatingTexts2) // TEMP
+  // console.log('tlatableRepeatingTexts1', tltableRepeatingTexts1) // TEMP
+  // console.log('tlatableRepeatingTexts2', tltableRepeatingTexts2) // TEMP
 
 
 
@@ -64,50 +72,57 @@ export const Test3: FunctionComponent<Props> = ({
   console.log('tltableUniqueTexts1', tltableUniqueTexts1) // TEMP
 
 
-  const modifiedTltableUniqueTexts1 = Object.fromEntries(Object.entries(tltableUniqueTexts1).filter(([text, {occurances}]) => !(text in tltableRepeatingTexts1) && !(text in tltableRepeatingTexts2) && occurances > 1))
+  const adjustedTltableUniqueTexts1 = Object.fromEntries(Object.entries(tltableUniqueTexts1).filter(([text, {occurances}]) => !(text in tltableRepeatingTexts1) && occurances > 1))
 
   console.log({
-    modifiedTltableUniqueTexts1: Object.keys(modifiedTltableUniqueTexts1).length,
+    adjustedTltableUniqueTexts1: Object.keys(adjustedTltableUniqueTexts1).length,
   }) // TEMP
 
-  console.log('modifiedTltableUniqueTexts1', modifiedTltableUniqueTexts1) // TEMP
+  console.log('adjustedTltableUniqueTexts1', adjustedTltableUniqueTexts1) // TEMP
+
+
+  const allRepeatingTexts = {
+    ...tltableRepeatingTexts1,
+    ...adjustedTltableUniqueTexts1,
+  }
+
+  console.log('allRepeatingTexts', Object.keys(allRepeatingTexts).length, allRepeatingTexts) // TEMP
+  const allTextsSortedByOccurances = Object.values(allRepeatingTexts).sort(({occurances: a}, {occurances: b}) => b - a)
+  console.log('allTextsSortedByOccurances', allTextsSortedByOccurances) // TEMP
+  
 
 
 
-  let occurancesArrays = [
-    Object.values(tltableRepeatingTexts1).map(({occurances}) => occurances),
-    Object.values(tltableRepeatingTexts2).map(({occurances}) => occurances),
-    Object.values(modifiedTltableUniqueTexts1).map(({occurances}) => occurances),
-  ]
-  occurancesArrays.forEach(arr => arr.sort((a, b) => b - a))
-  occurancesArrays = occurancesArrays.map(arr => [...new Set(arr)])
-  console.log('occurancesArrays', occurancesArrays) // TEMP
+  
+  // TEMP
+  // let occurancesArrays = [
+  //   Object.values(tltableRepeatingTexts1).map(({occurances}) => occurances),
+  //   Object.values(tltableRepeatingTexts2).map(({occurances}) => occurances),
+  //   Object.values(modifiedTltableUniqueTexts1).map(({occurances}) => occurances),
+  // ]
+  // occurancesArrays.forEach(arr => arr.sort((a, b) => b - a))
+  // occurancesArrays = occurancesArrays.map(arr => [...new Set(arr)])
+  // console.log('occurancesArrays', occurancesArrays) // TEMP
+  
 
 
 
 
-
-
-  // const modifiedEntries = replaceAccountedForTexts(
-  //   cleanUniqueTexts1,
-  //   cleanUniqueTexts2,
-  //   cleanUniqueTexts3,
+  
+  // const entryIdsByChamp = getEntryIdsForChampions({ignoreTftIds: true})
+  // const championEntryIds = arrToObj(Object.values(entryIdsByChamp).flat())
+  // console.log('championEntryIds', championEntryIds) // TEMP
+  
+  
+  // const unaccountedForTexts = replaceAccountedForTexts(
+  //   tltableRepeatingTexts1,
+  //   adjustedTltableUniqueTexts1,
   // )
-  // console.log('modifiedEntries', modifiedEntries) // TEMP
-
-  // const flipped = flipStringObject(modifiedEntries)
-  // console.log('flipped', flipped) // TEMP
-
-  // const [modifiedEntries2] = filterUniqueTexts(flipped)
-  // console.log('modifiedEntries2', modifiedEntries2) // TEMP
+  // console.log('unaccountedForTexts', unaccountedForTexts) // TEMP
 
 
-  // const unaccountedTexts = getUnaccountedTexts(
-  //   Object.keys(uniqueTextsLevel1),
-  //   Object.keys(uniqueTextsLevel2),
-  //   Object.keys(uniqueTextsLevel3),
-  // )
-  // console.log('unaccountedTexts', unaccountedTexts) // TEMP
+  // const unaccountedForChampionTexts = Object.fromEntries(Object.entries(unaccountedForTexts).filter(([entryId]) => entryId in championEntryIds))
+  // console.log('unaccountedForChampionTexts', unaccountedForChampionTexts) // TEMP
 
   //
   //
