@@ -65,12 +65,6 @@ test('options work', () => {
     includeUniqueOnly: true,
   }
 
-  // TEMP
-  expect(getTags(irregular1, options)).toStrictEqual([
-    '<div>', '<block>', '<aside>', '</aside>', '</block>', '</div>',
-  ])
-  if ((() => true)()) return // TEMP
-
 
   expect(getTags(proper1, options)).toStrictEqual([
     '<div>', '<span>', '<a>', '</a>', '</span>', '</div>',

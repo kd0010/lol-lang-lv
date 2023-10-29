@@ -11,7 +11,10 @@ import { lastIndexOfTag } from '../tags/lastIndexOfTag'
  */
 export function getRepeatingTextsThroughTags(
   entriesWithTags: StringtableEntries,
+  repeatsAtLeastTimes: number=2,
 ): AnalyzedTexts {
+  if (repeatsAtLeastTimes < 2) throw 'repeatsAtLeastTimes must be at least 2'
+
   const repeatingTexts: AnalyzedTexts = {}
 
   // For each tag and its full contents,
@@ -42,7 +45,7 @@ export function getRepeatingTextsThroughTags(
   }
 
   for (const tagName of uniqueTags) {
-    // console.log('\ntagName', tagName) // TEMPDEV
+    console.log('\ntagName', tagName) // TEMPDEV
 
     for (const entryId in entriesWithTags) {
       const entryText = entriesWithTags[entryId]!
@@ -71,7 +74,7 @@ export function getRepeatingTextsThroughTags(
           currentTextCount = count
           currentOccursInIds = occursInIds
 
-          if (currentTextCount > 1) {
+          if (currentTextCount >= repeatsAtLeastTimes) {
             const parentTagName = getParentTag(entryText, currentTag, currentOpeningTagIdx)
 
             if (parentTagName == null) {

@@ -1,3 +1,4 @@
+import { AnalyzedTexts, StringtableEntries } from '../../types/types'
 import { getClosingTagIndex } from '../tags/getClosingTagIndex'
 import { getDeepestTags } from '../tags/getDeepestTags'
 import { getParentTag } from '../tags/getParentTag'
@@ -10,35 +11,41 @@ import { lastIndexOfTag } from '../tags/lastIndexOfTag'
  * Any unique texts that don't involve tags will not be gotten here.
  */
 export function getUniqueTextsThroughTags(
-  entryTextsWithTags: string[],
+  entriesWithTags: StringtableEntries,
   /** Tag depth to use, meaning levels in HTML structure. */
   depth: number,
-): {[text: string]: number} {
-  const uniqueTexts: {[text: string]: number} = {}
+): AnalyzedTexts {
+  const uniqueTexts: AnalyzedTexts = {}
+  const entriesWithTagsLength = Object.keys(entriesWithTags).length
 
   /** This object saves all texts, even non-repeating ones and overlaps. */
-  const textCounts: typeof uniqueTexts = {}
-  const getTextCount = (text: string): number => {
+  const textCounts: {[text: string]: [number, string[]]} = {}
+  const getTextCount = (text: string): [number, string[]] => {
     if (text in textCounts) return textCounts[text]!
 
     let count = 0
-    for (const entryText2 of entryTextsWithTags) {
-      const foundIndex = entryText2.indexOf(text)
+    const occursInIds: string[] = []
+    for (const entryId in entriesWithTags) {
+      const entryText = entriesWithTags[entryId]!
+      const foundIndex = entryText.indexOf(text)
       if (foundIndex == -1) continue
+      occursInIds.push(entryId)
       count++
     }
 
-    textCounts[text] = count
+    textCounts[text] = [count, occursInIds]
 
-    return count
+    return [count, occursInIds]
   }
 
   let loadingCount = 0
 
-  for (const entryText of entryTextsWithTags) {
-    if (++loadingCount % 1000 == 0) console.log(`${loadingCount} / ${entryTextsWithTags.length}`) // TEMPDEV
-    const deepestTags = getDeepestTags(entryText)
+  for (const entryId in entriesWithTags) {
+    const entryText = entriesWithTags[entryId]!
 
+    if (++loadingCount % 1000 == 0) console.log(`${loadingCount} / ${entriesWithTagsLength}`) // TEMPDEV
+
+    const deepestTags = getDeepestTags(entryText)
     for (const {
       tagName,
       openingTagIndex,
@@ -49,6 +56,7 @@ export function getUniqueTextsThroughTags(
       let currentClosingTagIdx = closingTagIndex
       let currentText = ''
       let currentTextCount = 0
+      let currentOccursInIds: string[] = []
       let depthPointsAvailable = depth
       let reachedMaxDepth = true
 
@@ -56,7 +64,10 @@ export function getUniqueTextsThroughTags(
         const currentClosingTagLength = '</'.length + currentTag.length + '>'.length
 
         currentText = entryText.slice(currentOpeningTagIdx, currentClosingTagIdx + currentClosingTagLength)
-        currentTextCount = getTextCount(currentText)
+        
+        const [count, occursInIds] = getTextCount(currentText)
+        currentTextCount = count
+        currentOccursInIds = occursInIds
 
         const parentTagName = getParentTag(entryText, currentTag, currentOpeningTagIdx)
 
@@ -75,7 +86,13 @@ export function getUniqueTextsThroughTags(
         currentClosingTagIdx = newClosingTagIdx
       }
 
-      if (reachedMaxDepth) uniqueTexts[currentText] = currentTextCount
+      if (reachedMaxDepth) {
+        uniqueTexts[currentText] = {
+          text: currentText,
+          occurances: currentTextCount,
+          occursInIds: currentOccursInIds,
+        }
+      }
     }
   }
 

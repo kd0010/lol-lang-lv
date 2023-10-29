@@ -44,7 +44,13 @@ export function getTags(
       doRecordTag = false
       currentTag = ''
     } else if (doRecordTag) {
-      addLetter(letter)
+      if (currentTag == '<' && letter == ' ') {
+        // a space character cannot be the next character right after opening bracket
+        currentTag = ''
+        doRecordTag = false
+      } else {
+        addLetter(letter)
+      }
     }
 
     previousLetter = letter
