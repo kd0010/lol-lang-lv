@@ -1,3 +1,3 @@
-import { main_en_gb } from './main_en_gb'
+import { main_en_gb_13_21 } from './main_en_gb_13_21'
 
-export const entries = main_en_gb.entries
+export const entries = main_en_gb_13_21.entries

@@ -1,5 +1,5 @@
 import { entries } from '../constants/entries'
-import { main_en_gb } from '../constants/main_en_gb'
+import { main_en_gb_13_21 } from '../constants/main_en_gb_13_21'
 
 const local: {
   entryTexts: string[] | undefined
@@ -14,15 +14,15 @@ const local: {
 }
 
 export function getEntryTexts(): string[] {
-  return local.entryTexts ?? (local.entryTexts = Object.values(main_en_gb.entries))
+  return local.entryTexts ?? (local.entryTexts = Object.values(main_en_gb_13_21.entries))
 }
 
 export function getEntryTextsWithTags(): string[] {
-  return local.entryTextsWithTags ?? (local.entryTextsWithTags = Object.values(main_en_gb.entries).filter(text => text.indexOf('<') != -1 && text.indexOf('>') != -1))
+  return local.entryTextsWithTags ?? (local.entryTextsWithTags = Object.values(main_en_gb_13_21.entries).filter(text => text.indexOf('<') != -1 && text.indexOf('>') != -1))
 }
 
 export function getEntryTextsWithoutTags(): string[] {
-  return local.entryTextsWithoutTags ?? (local.entryTextsWithoutTags = Object.values(main_en_gb.entries).filter(text => text.indexOf('<') == -1 || text.indexOf('>') == -1))
+  return local.entryTextsWithoutTags ?? (local.entryTextsWithoutTags = Object.values(main_en_gb_13_21.entries).filter(text => text.indexOf('<') == -1 || text.indexOf('>') == -1))
 }
 
 export function getEntriesWithTags(): {[entryId: string]: string} {

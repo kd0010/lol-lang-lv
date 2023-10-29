@@ -4,7 +4,7 @@ import { entryTexts } from '../../constants/entryTexts'
  * Returns relevant numbers for entries,
  * in order to have a perspective on how big the data is.
  */
-export function analyzeEntries(): MainStringtableAnalysis {
+export function analyzeEntries(): StringtableAnalysis {
   const totalEntryCount = entryTexts.length
 
   return {
@@ -12,6 +12,6 @@ export function analyzeEntries(): MainStringtableAnalysis {
   }
 }
 
-export interface MainStringtableAnalysis {
+export interface StringtableAnalysis {
   totalEntryCount: number
 }
