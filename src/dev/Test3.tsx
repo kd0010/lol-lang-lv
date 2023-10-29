@@ -1,17 +1,18 @@
-import { FunctionComponent } from 'preact'
-import { useEffect } from 'preact/hooks'
+import { ComponentChildren, FunctionComponent } from 'preact'
+import { useEffect, useState } from 'preact/hooks'
 import { repeatingTexts1 } from './repeatingTexts1'
 import { repeatingTexts2 } from './repeatingTexts2'
 import { repeatingTexts3 } from './repeatingTexts3'
-import { uniqueTextsLevel1 } from './uniqueTextsLevel1'
-import { uniqueTextsLevel2 } from './uniqueTextsLevel2'
-import { uniqueTextsLevel3 } from './uniqueTextsLevel3'
-import { filterUniqueTexts } from '../functions/the-real-guns/filterUniqueTexts'
+import { filterTranslateableTexts } from '../functions/the-real-guns/filterTranslateableTexts'
 import { analyzedTextsToEntries } from '../functions/analyzedTextToEntries'
 import { getRepeatingTextsThroughTags } from '../functions/the-real-guns/getRepeatingTextsThroughTags'
 import { entriesWithTags } from '../constants/entriesWithTags'
 import { replaceAccountedForTexts } from '../functions/meta-analysis/replaceAccountedForTexts'
 import { flipStringObject } from '../helpers/flipStringObject'
+import { repeatingTexts4 } from './repeatingTexts4'
+import { getEntryUniqueTags } from '../functions/meta-analysis/getEntryUniqueTags'
+import { getUniqueTextsThroughTags } from '../functions/the-real-guns/getUniqueTextsThroughTags'
+import { uniqueTexts1 } from './uniqueTexts1'
 
 interface Props {
   
@@ -20,112 +21,85 @@ interface Props {
 export const Test3: FunctionComponent<Props> = ({
   
 }) => {
+  const [temp, setTemp] = useState<ComponentChildren>()
   useEffect(() => {(async () => {
   //
   //
   //
 
   // const repeatingTexts1 = getRepeatingTextsThroughTags(entriesWithTags)
-
   // const repeatingTexts2 = getRepeatingTextsThroughTags(analyzedTextsToEntries(repeatingTexts1))
 
-  // const repeatingTexts3 = getRepeatingTextsThroughTags(analyzedTextsToEntries(repeatingTexts2))
-
-  // const repeatingTexts4 = getRepeatingTextsThroughTags(analyzedTextsToEntries(repeatingTexts3))
-
-
-  // console.log('repeatingTexts', repeatingTexts) // TEMP
+  // console.log('repeatingTexts1', repeatingTexts1) // TEMP
   // console.log('repeatingTexts2', repeatingTexts2) // TEMP
   // console.log('repeatingTexts3', repeatingTexts3) // TEMP
   // console.log('repeatingTexts4', repeatingTexts4) // TEMP
 
 
-  // console.log([
-  //   Object.keys(repeatingTexts1).length,
-  //   Object.keys(repeatingTexts2).length,
-  //   Object.keys(repeatingTexts3).length,
-  // ]) // TEMP
+  const [tltableRepeatingTexts1] = filterTranslateableTexts(repeatingTexts1, {filterTftTexts: true})
+  const [tltableRepeatingTexts2] = filterTranslateableTexts(repeatingTexts2, {filterTftTexts: true})
 
-  // console.log([
-  //   Object.keys(uniqueTextsLevel1).length,
-  //   Object.keys(uniqueTextsLevel2).length,
-  //   Object.keys(uniqueTextsLevel3).length,
-  // ]) // TEMP
+  console.log({
+    tlatableRepeatingTexts1: Object.keys(tltableRepeatingTexts1).length,
+    tlatableRepeatingTexts2: Object.keys(tltableRepeatingTexts2).length,
+  }) // TEMP
 
-  // console.log('---') // TEMP
-
-  // console.log([
-  //   Object.keys(filterUniqueTexts(repeatingTexts1)).length,
-  //   Object.keys(filterUniqueTexts(repeatingTexts2)).length,
-  //   Object.keys(filterUniqueTexts(repeatingTexts3)).length,
-  // ]) // TEMP
-
-  // console.log([
-  //   Object.keys(filterUniqueTexts(uniqueTextsLevel1)).length,
-  //   Object.keys(filterUniqueTexts(uniqueTextsLevel2)).length,
-  //   Object.keys(filterUniqueTexts(uniqueTextsLevel3)).length,
-  // ]) // TEMP
-
-  // console.log({
-  //   repeatingTexts1: filterUniqueTexts(repeatingTexts1),
-  //   repeatingTexts2: filterUniqueTexts(repeatingTexts2),
-  //   repeatingTexts3: filterUniqueTexts(repeatingTexts3),
-  // }) // TEMP
+  console.log('tlatableRepeatingTexts1', tltableRepeatingTexts1) // TEMP
+  console.log('tlatableRepeatingTexts2', tltableRepeatingTexts2) // TEMP
 
 
 
 
+  // const uniqueTexts1 = getUniqueTextsThroughTags(entriesWithTags, 1)
 
-  // const uniqueTextsLevel1 = getUniqueTextsThroughTags(entryTextsWithTags, 1)
-  // const uniqueTextsLevel2 = getUniqueTextsThroughTags(entryTextsWithTags, 2)
-  // const uniqueTextsLevel3 = getUniqueTextsThroughTags(entryTextsWithTags, 3)
-
-  // console.log('uniqueTextsLevel1', uniqueTextsLevel1) // TEMP
-  // console.log('uniqueTextsLevel2', uniqueTextsLevel2) // TEMP
-  // console.log('uniqueTextsLevel3', uniqueTextsLevel3) // TEMP
+  // console.log('uniqueTexts1', uniqueTexts1) // TEMP
 
 
-  // const one = filterUniqueTexts(uniqueTextsLevel1)
-  // const two = filterUniqueTexts(uniqueTextsLevel2)
-  // const thr = filterUniqueTexts(uniqueTextsLevel3)
+  const [tltableUniqueTexts1] = filterTranslateableTexts(uniqueTexts1, {filterTftTexts: true})
 
-  // console.log([
-  //   one,
-  //   two,
-  //   thr,
-  // ]) // TEMP
+  console.log({
+    tlatableUniqueTexts1: Object.keys(tltableUniqueTexts1).length,
+  }) // TEMP
 
-  // console.log([
-  //   Object.keys(one).length,
-  //   Object.keys(two).length,
-  //   Object.keys(thr).length,
-  // ]) // TEMP
+  console.log('tltableUniqueTexts1', tltableUniqueTexts1) // TEMP
+
+
+  const modifiedTltableUniqueTexts1 = Object.fromEntries(Object.entries(tltableUniqueTexts1).filter(([text, {occurances}]) => !(text in tltableRepeatingTexts1) && !(text in tltableRepeatingTexts2) && occurances > 1))
+
+  console.log({
+    modifiedTltableUniqueTexts1: Object.keys(modifiedTltableUniqueTexts1).length,
+  }) // TEMP
+
+  console.log('modifiedTltableUniqueTexts1', modifiedTltableUniqueTexts1) // TEMP
+
+
+
+  let occurancesArrays = [
+    Object.values(tltableRepeatingTexts1).map(({occurances}) => occurances),
+    Object.values(tltableRepeatingTexts2).map(({occurances}) => occurances),
+    Object.values(modifiedTltableUniqueTexts1).map(({occurances}) => occurances),
+  ]
+  occurancesArrays.forEach(arr => arr.sort((a, b) => b - a))
+  occurancesArrays = occurancesArrays.map(arr => [...new Set(arr)])
+  console.log('occurancesArrays', occurancesArrays) // TEMP
 
 
 
 
 
-  const [cleanUniqueTexts1] = filterUniqueTexts(repeatingTexts1)
-  const [cleanUniqueTexts2] = filterUniqueTexts(repeatingTexts2)
-  const [cleanUniqueTexts3] = filterUniqueTexts(repeatingTexts3)
 
-  console.log([
-    Object.keys(repeatingTexts1).length,
-    Object.keys(cleanUniqueTexts1).length,
-  ]) // TEMP
+  // const modifiedEntries = replaceAccountedForTexts(
+  //   cleanUniqueTexts1,
+  //   cleanUniqueTexts2,
+  //   cleanUniqueTexts3,
+  // )
+  // console.log('modifiedEntries', modifiedEntries) // TEMP
 
-  const modifiedEntries = replaceAccountedForTexts(
-    cleanUniqueTexts1,
-    cleanUniqueTexts2,
-    cleanUniqueTexts3,
-  )
-  console.log('modifiedEntries', modifiedEntries) // TEMP
+  // const flipped = flipStringObject(modifiedEntries)
+  // console.log('flipped', flipped) // TEMP
 
-  const flipped = flipStringObject(modifiedEntries)
-  console.log('flipped', flipped) // TEMP
-
-  const [modifiedEntries2] = filterUniqueTexts(flipped)
-  console.log('modifiedEntries2', modifiedEntries2) // TEMP
+  // const [modifiedEntries2] = filterUniqueTexts(flipped)
+  // console.log('modifiedEntries2', modifiedEntries2) // TEMP
 
 
   // const unaccountedTexts = getUnaccountedTexts(
@@ -142,6 +116,7 @@ export const Test3: FunctionComponent<Props> = ({
 
   return (
     <div>
+      {temp}
     </div>
   )
 }
