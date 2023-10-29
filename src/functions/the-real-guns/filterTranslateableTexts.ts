@@ -1,64 +1,36 @@
-import {
-  atVariableRegex,
-  calcTagWithContentsRegex,
-  dollarSignVariableRegex,
-  percentIVariableRegex,
-  variableInDoubleCurlyBracketsRegex,
-  wordsRegex,
-} from '../../constants/regexes'
-import { isTftTag } from '../../constants/tftTags'
+import { wordsRegex } from '../../constants/regexes'
+import { isTftTag } from '../../constants/TftTags'
+import { stripEntryText } from '../stripEntryText'
 import { getTags } from '../tags/getTags'
 
 export function filterTranslateableTexts<T>(
-  uniqueTexts: {[text: string]: T},
+  texts: {[text: string]: T},
   {
     filterTftTexts=false,
   }: FilterTranslateableTextsOptions={},
 ): [{[text: string]: T}, {[text: string]: T}] {
-  const cleanUniqueTexts: {[text: string]: T} = {}
-  const dirtyUniqueTexts: {[text: string]: T} = {}
-  const delChar = ''
-  const _atVariableRegex = new RegExp(atVariableRegex, 'g')
-  const _percentIVariableRegex = new RegExp(percentIVariableRegex, 'g')
-  const _variableInDoubleCurlyBracketsRegex = new RegExp(variableInDoubleCurlyBracketsRegex, 'g')
-  const _dollarSignVariableRegex = new RegExp(dollarSignVariableRegex, 'g')
-  const _calcTagWithContentsRegex = new RegExp(calcTagWithContentsRegex, 'g')
+  const cleanTexts: {[text: string]: T} = {}
+  const dirtyTexts: {[text: string]: T} = {}
 
-  for (const uniqueText in uniqueTexts) {
-    const value = uniqueTexts[uniqueText]!
-    let filteredText = uniqueText
-
+  for (const text in texts) {
     // Skip over TFT texts, if opt'd for
     if (filterTftTexts) {
-      const tags = getTags(uniqueText, {includeUniqueOnly: true})
+      const tags = getTags(text, {includeUniqueOnly: true})
       if (tags.some(isTftTag)) continue
     }
-    
-    // Delete variable texts
-    filteredText = filteredText.replaceAll(_atVariableRegex, delChar)
-    filteredText = filteredText.replaceAll(_percentIVariableRegex, delChar)
-    filteredText = filteredText.replaceAll(_variableInDoubleCurlyBracketsRegex, delChar)
-    filteredText = filteredText.replaceAll(_dollarSignVariableRegex, delChar)
-    // before tag removal, delete all calc tags and their content
-    filteredText = filteredText.replaceAll(_calcTagWithContentsRegex, delChar)
 
-    // Delete tags
-    const tagTexts = getTags(filteredText, {
-      includeAttributes: true,
-      includeEndingTags: true,
-      includeTagBrackets: true,
-    })
-    const tagsRegex = new RegExp('(' + tagTexts.join('|') + ')', 'g')
-    filteredText = filteredText.replaceAll(tagsRegex, delChar)
+    const strippedText = stripEntryText(text)
 
     // Check whether it still has any real content left
-    const hasWords = wordsRegex.test(filteredText)
+    const hasWords = wordsRegex.test(strippedText)
 
-    if (hasWords) cleanUniqueTexts[uniqueText] = value
-    else dirtyUniqueTexts[uniqueText] = value
+    const value = texts[text]!
+
+    if (hasWords) cleanTexts[text] = value
+    else dirtyTexts[text] = value
   }
 
-  return [cleanUniqueTexts, dirtyUniqueTexts]
+  return [cleanTexts, dirtyTexts]
 }
 
 export interface FilterTranslateableTextsOptions {

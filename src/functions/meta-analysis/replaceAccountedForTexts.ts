@@ -1,5 +1,8 @@
 import { entries } from '../../constants/entries'
+import { flipStringObject } from '../../helpers/flipStringObject'
 import { AnalyzedTexts, StringtableEntries } from '../../types/types'
+import { stripEntryText } from '../stripEntryText'
+import { filterTranslateableTexts } from '../the-real-guns/filterTranslateableTexts'
 
 /**
  * Modifies the original entries object,
@@ -9,6 +12,7 @@ import { AnalyzedTexts, StringtableEntries } from '../../types/types'
  * for ease of use for meta-analysis.
  */
 export function replaceAccountedForTexts(
+  returnStrippedTexts: boolean,
   ...multipleAnalyzedTexts: AnalyzedTexts[]
 ): StringtableEntries {
   const modifiedEntries: StringtableEntries = {}
@@ -27,5 +31,20 @@ export function replaceAccountedForTexts(
     }
   }
 
-  return modifiedEntries
+  // filter stuff that isn't trasnlateable out
+  let [tltableModifiedEntries] = filterTranslateableTexts(flipStringObject(modifiedEntries))
+
+  tltableModifiedEntries = flipStringObject(tltableModifiedEntries) // flip back
+
+  // strip texts from tags etc. for easier viewing onto
+  // what translateable texts have not been accounted for
+  if (returnStrippedTexts) {
+    for (const entryId in tltableModifiedEntries) {
+      const text = tltableModifiedEntries[entryId]!
+      const strippedText = stripEntryText(text)
+      tltableModifiedEntries[entryId] = strippedText
+    }
+  }
+
+  return tltableModifiedEntries
 }
