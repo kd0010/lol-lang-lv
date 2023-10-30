@@ -15,7 +15,7 @@ export function getEntryUniqueTags({
   let uniqueTags = [...new Set(allTags)]
 
   if (excludeSelfClosingTags) {
-    uniqueTags = uniqueTags.filter(isSelfClosingTag)
+    uniqueTags = uniqueTags.filter(tagName => !isSelfClosingTag(tagName))
   }
 
   return uniqueTags

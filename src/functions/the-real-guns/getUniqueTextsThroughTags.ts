@@ -37,13 +37,35 @@ export function getUniqueTextsThroughTags(
 
     return [count, occursInIds]
   }
+  const significantCharAmount: number = 200
+  const examplesCache: {[text: string]: string} = {}
+  const getExample = (text: string, occurdsInIds: string[]): string => {
+    if (text in examplesCache) return examplesCache[text]!
+    let suitableExample = ''
+    for (const entryId of occurdsInIds) {
+      const text = entriesWithTags[entryId]
+      if (text == null) continue
+      suitableExample = text
+      if (suitableExample.length >= significantCharAmount) break
+    }
+    suitableExample = surroundRepeatingTextInEmojis(suitableExample, text, '➡️', '⬅️')
+    examplesCache[text] = suitableExample
+    return suitableExample
+  }
+  const surroundRepeatingTextInEmojis = (example: string, repeatingText: string, beginEmoji: string, endEmoji: string): string => {
+    const beginIdx = example.indexOf(repeatingText)
+    if (beginIdx == null) return repeatingText
+    const endIdx = beginIdx + repeatingText.length
+    return example.slice(0, beginIdx) + beginEmoji + example.slice(beginIdx, endIdx) + endEmoji + example.slice(endIdx)
+  }
 
   let loadingCount = 0
 
+  // for (const entryId in Object.fromEntries(Object.entries(entriesWithTags).slice(500, 550))) { // TEMPDEV
   for (const entryId in entriesWithTags) {
     const entryText = entriesWithTags[entryId]!
 
-    if (++loadingCount % 1000 == 0) console.log(`${loadingCount} / ${entriesWithTagsLength}`) // TEMPDEV
+    if (loadingCount == 0 || ++loadingCount % 1000 == 0) console.log(`${loadingCount} / ${entriesWithTagsLength}`) // TEMPDEV
 
     const deepestTags = getDeepestTags(entryText)
     for (const {
@@ -91,6 +113,7 @@ export function getUniqueTextsThroughTags(
           text: currentText,
           occurances: currentTextCount,
           occursInIds: currentOccursInIds,
+          example: getExample(currentText, currentOccursInIds),
         }
       }
     }

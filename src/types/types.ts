@@ -12,6 +12,7 @@ export interface AnalyzedText {
   text: string
   occurances: number
   occursInIds: string[]
+  example: string
 }
 
 export interface AnalyzedTexts {

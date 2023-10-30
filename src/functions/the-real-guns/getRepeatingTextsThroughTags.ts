@@ -6,6 +6,8 @@ import { getTagIndices } from '../tags/getTagIndices'
 import { lastIndexOfTag } from '../tags/lastIndexOfTag'
 
 /**
+ * **Warning!** Expensive operation.
+ * 
  * Gets repeating texts **through tags**, counting them.
  * Any repeating texts that don't involve tags will not be gotten here.
  */
@@ -25,12 +27,12 @@ export function getRepeatingTextsThroughTags(
   const uniqueTags = getEntryUniqueTags({excludeSelfClosingTags: true})
 
   /** This object saves all texts, even non-repeating ones and overlaps. */
-  const textCounts: {[text: string]: [number, string[]]} = {}
-  const getTextCount = (text: string): [number, string[]] => {
-    if (text in textCounts) return textCounts[text]!
+  const textAnalyses: {[text: string]: [number, string[]]} = {}
+  const analyzeText = (text: string): [number, string[]] => {
+    if (text in textAnalyses) return textAnalyses[text]!
 
     let count = 0
-    const occursInIds: string[] = []
+    let occursInIds: string[] = []
     for (const entryId in entriesWithTags) {
       const entryText = entriesWithTags[entryId]!
       const foundIndex = entryText.indexOf(text)
@@ -39,14 +41,36 @@ export function getRepeatingTextsThroughTags(
       count++
     }
 
-    textCounts[text] = [count, occursInIds]
+    textAnalyses[text] = [count, occursInIds]
 
     return [count, occursInIds]
+  }
+  const significantCharAmount: number = 200
+  const examplesCache: {[text: string]: string} = {}
+  const getExample = (text: string, occurdsInIds: string[]): string => {
+    if (text in examplesCache) return examplesCache[text]!
+    let suitableExample = ''
+    for (const entryId of occurdsInIds) {
+      const text = entriesWithTags[entryId]
+      if (text == null) continue
+      suitableExample = text
+      if (suitableExample.length >= significantCharAmount) break
+    }
+    suitableExample = surroundRepeatingTextInEmojis(suitableExample, text, '➡️', '⬅️')
+    examplesCache[text] = suitableExample
+    return suitableExample
+  }
+  const surroundRepeatingTextInEmojis = (example: string, repeatingText: string, beginEmoji: string, endEmoji: string): string => {
+    const beginIdx = example.indexOf(repeatingText)
+    if (beginIdx == null) return repeatingText
+    const endIdx = beginIdx + repeatingText.length
+    return example.slice(0, beginIdx) + beginEmoji + example.slice(beginIdx, endIdx) + endEmoji + example.slice(endIdx)
   }
 
   for (const tagName of uniqueTags) {
     console.log('\ntagName', tagName) // TEMPDEV
 
+    // for (const entryId in Object.fromEntries(Object.entries(entriesWithTags).slice(500, 550))) { // TEMPDEV
     for (const entryId in entriesWithTags) {
       const entryText = entriesWithTags[entryId]!
       // there could be more than 1 tag of this `tagName`.
@@ -70,7 +94,7 @@ export function getRepeatingTextsThroughTags(
 
           currentText = entryText.slice(currentOpeningTagIdx, currentClosingTagIdx + currentClosingTagLength)
 
-          const [count, occursInIds] = getTextCount(currentText)
+          const [count, occursInIds] = analyzeText(currentText)
           currentTextCount = count
           currentOccursInIds = occursInIds
 
@@ -82,6 +106,7 @@ export function getRepeatingTextsThroughTags(
                 text: currentText,
                 occurances: currentTextCount,
                 occursInIds: currentOccursInIds,
+                example: getExample(currentText, currentOccursInIds),
               }
               break // go next entry text; have exceeded how far can go with this one
             }
@@ -109,6 +134,7 @@ export function getRepeatingTextsThroughTags(
               text: previousText,
               occurances: previousTextCount,
               occursInIds: previousOccursInIds,
+              example: getExample(previousText, previousOccursInIds),
             }
           }
 
