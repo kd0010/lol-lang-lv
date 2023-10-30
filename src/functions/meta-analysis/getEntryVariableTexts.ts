@@ -5,7 +5,7 @@ import {
   percentIVariableRegex,
   dollarSignVariableRegex,
 } from '../../constants/regexes'
-import { getUniqueTexts } from './getUniqueTexts'
+import { searchTexts } from './searchTexts'
 
 /**
  * Returns all variable-type texts from entries.
@@ -13,10 +13,10 @@ import { getUniqueTexts } from './getUniqueTexts'
  * for translation purposes.
  */
 export function getEntryVariableTexts() {
-  const atVariableTexts = getUniqueTexts(entryTexts, atVariableRegex)
-  const percentIVariableTexts = getUniqueTexts(entryTexts, percentIVariableRegex)
-  const variableInDoubleCurlyBracketsTexts = getUniqueTexts(entryTexts, variableInDoubleCurlyBracketsRegex)
-  const dollarSignTexts = getUniqueTexts(entryTexts, dollarSignVariableRegex)
+  const atVariableTexts = searchTexts(entryTexts, atVariableRegex)
+  const percentIVariableTexts = searchTexts(entryTexts, percentIVariableRegex)
+  const variableInDoubleCurlyBracketsTexts = searchTexts(entryTexts, variableInDoubleCurlyBracketsRegex)
+  const dollarSignTexts = searchTexts(entryTexts, dollarSignVariableRegex)
 
   return {
     atVariableTexts,

@@ -1,7 +1,10 @@
+import { isSelfClosingTag } from '../../constants/SelfClosingTags'
 import { entryTextsWithTags } from '../../constants/entryTextsWithTags'
 import { getTags } from '../tags/getTags'
 
-export function getEntryUniqueTags(): string[] {
+export function getEntryUniqueTags({
+  excludeSelfClosingTags=false,
+}: GetEntryUniqueTagsOptions={}): string[] {
   const allTags: string[] = []
   
   for (const entryText of entryTextsWithTags) {
@@ -9,7 +12,15 @@ export function getEntryUniqueTags(): string[] {
     allTags.push(...tags)
   }
 
-  const uniqueTags = [...new Set(allTags)]
+  let uniqueTags = [...new Set(allTags)]
+
+  if (excludeSelfClosingTags) {
+    uniqueTags = uniqueTags.filter(isSelfClosingTag)
+  }
 
   return uniqueTags
+}
+
+export interface GetEntryUniqueTagsOptions {
+  excludeSelfClosingTags?: boolean
 }

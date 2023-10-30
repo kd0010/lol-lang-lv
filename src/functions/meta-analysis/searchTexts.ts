@@ -1,8 +1,8 @@
 /**
- * Returns strings that match a certain provided regex
+ * Returns unique strings that match a certain provided regex
  * from all entry texts.
  */
-export function getUniqueTexts(
+export function searchTexts(
   texts: string[],
   regex: RegExp,
 ): string[] {

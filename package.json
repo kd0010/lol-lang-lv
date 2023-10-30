@@ -10,11 +10,12 @@
     "build:clean": "rmdir /s /q dist && tsc",
     "serve": "nodemon ./src/dev/nodeApp.ts",
     "dev": "vite",
-    "test": "vitest"
+    "test": "vitest",
+    "rion": "rion main_en_gb.json"
   },
   "dependencies": {
     "html-escaper": "^3.0.3",
-    "lol-constants": "^2.13.0",
+    "lol-constants": "^2.14.0",
     "rift-js-utils": "^2.5.0"
   },
   "devDependencies": {

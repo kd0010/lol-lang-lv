@@ -22,7 +22,7 @@ export function getRepeatingTextsThroughTags(
   // Look outwards onto parent tag;
   // try to find a repeating sequence that is bigger.
   // Look for repetition and discard what doesn't repeat.
-  const uniqueTags = getEntryUniqueTags()
+  const uniqueTags = getEntryUniqueTags({excludeSelfClosingTags: true})
 
   /** This object saves all texts, even non-repeating ones and overlaps. */
   const textCounts: {[text: string]: [number, string[]]} = {}
