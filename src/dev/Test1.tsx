@@ -18,6 +18,8 @@ export const Test1: FunctionComponent<Props> = ({
   //
   //
 
+  const minOccurancesRepeatingTexts = 'TEMP'
+
   // 1.1. Repeating texts
   const repeatingTexts = getRepeatingTextsThroughTags(entriesWithTags)
   const [tltableRepeatingTexts] = filterTranslateableTexts(repeatingTexts, {filterTftTexts: true})

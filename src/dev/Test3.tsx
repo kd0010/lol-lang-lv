@@ -1,15 +1,14 @@
 import { ComponentChildren, FunctionComponent } from 'preact'
 import { useEffect, useState } from 'preact/hooks'
 import { repeatingTexts1 } from './repeatingTexts1'
-import { repeatingTexts2 } from './repeatingTexts2'
-import { repeatingTexts3 } from './repeatingTexts3'
+import { repeatingTexts2 } from './old_repeatingTexts2'
+import { repeatingTexts3 } from './old_repeatingTexts3'
 import { filterTranslateableTexts } from '../functions/the-real-guns/filterTranslateableTexts'
 import { analyzedTextsToEntries } from '../functions/analyzedTextToEntries'
 import { getRepeatingTextsThroughTags } from '../functions/the-real-guns/getRepeatingTextsThroughTags'
 import { entriesWithTags } from '../constants/entriesWithTags'
 import { replaceAccountedForTexts } from '../functions/meta-analysis/replaceAccountedForTexts'
-import { flipStringObject } from '../helpers/flipStringObject'
-import { repeatingTexts4 } from './repeatingTexts4'
+import { repeatingTexts4 } from './old_repeatingTexts4'
 import { getEntryUniqueTags } from '../functions/meta-analysis/getEntryUniqueTags'
 import { getUniqueTextsThroughTags } from '../functions/the-real-guns/getUniqueTextsThroughTags'
 import { uniqueTexts1 } from './uniqueTexts1'
@@ -17,6 +16,7 @@ import { getEntryIdsForChampions } from '../functions/meta-analysis/getEntryIdsF
 import { arrToObj } from 'rift-js-utils/array'
 import { organizeChampionEntryIds } from '../functions/organizeChampionEntryIds'
 import { getEntryIdsByChampion } from '../functions/getEntryIdsByChampion'
+import { Item } from 'lol-constants/assets'
 
 interface Props {
   
@@ -31,17 +31,8 @@ export const Test3: FunctionComponent<Props> = ({
   //
   //
 
-  const vi = organizeChampionEntryIds('Vi', getEntryIdsByChampion('Vi'))
-  console.log('vi', vi) // TEMP
-  if ((() => true)()) return // TEMP
-
   // const repeatingTexts1 = getRepeatingTextsThroughTags(entriesWithTags)
-  // const repeatingTexts2 = getRepeatingTextsThroughTags(analyzedTextsToEntries(repeatingTexts1))
-
   // console.log('repeatingTexts1', repeatingTexts1) // TEMP
-  // console.log('repeatingTexts2', repeatingTexts2) // TEMP
-  // console.log('repeatingTexts3', repeatingTexts3) // TEMP
-  // console.log('repeatingTexts4', repeatingTexts4) // TEMP
 
 
   const [tltableRepeatingTexts1] = filterTranslateableTexts(repeatingTexts1, {filterTftTexts: true})
@@ -59,7 +50,6 @@ export const Test3: FunctionComponent<Props> = ({
 
 
   // const uniqueTexts1 = getUniqueTextsThroughTags(entriesWithTags, 1)
-
   // console.log('uniqueTexts1', uniqueTexts1) // TEMP
 
 
@@ -87,8 +77,8 @@ export const Test3: FunctionComponent<Props> = ({
   }
 
   console.log('allRepeatingTexts', Object.keys(allRepeatingTexts).length, allRepeatingTexts) // TEMP
-  const allTextsSortedByOccurances = Object.values(allRepeatingTexts).sort(({occurances: a}, {occurances: b}) => b - a)
-  console.log('allTextsSortedByOccurances', allTextsSortedByOccurances) // TEMP
+  const allRepeatingTextsSortedByOccurances = Object.values(allRepeatingTexts).sort(({occurances: a}, {occurances: b}) => b - a)
+  console.log('allRepeatingTextsSortedByOccurances', allRepeatingTextsSortedByOccurances) // TEMP
   
 
 

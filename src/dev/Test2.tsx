@@ -1,8 +1,7 @@
 import { FunctionComponent, ComponentChildren } from 'preact'
 import { useEffect, useState } from 'preact/hooks'
 import { getEntryIdsForChampions } from '../functions/meta-analysis/getEntryIdsForChampions'
-import { getEntryIdsByChampion } from '../functions/getEntryIdsByChampion'
-import { organizeChampionEntryIds } from '../functions/organizeChampionEntryIds'
+import { EntryIdAnalyzer, analyzeEntryIds } from '../functions/meta-analysis/EntryIdAnalyzer'
 
 interface Props {
   
@@ -16,15 +15,46 @@ export const Test2: FunctionComponent<Props> = ({
   //
   //
   //
+  if ((() => true)()) return // TEMP
 
-  // TEMP
-  const entryIdsByChamp = getEntryIdsForChampions({ignoreTftIds: true})
+  const entryIdsByChamp = getEntryIdsForChampions({ignoreTftIds: false})
   console.log(entryIdsByChamp) // TEMP
+  if ((() => true)()) return // TEMP
+
+  // const formats = EntryIdAnalyzer.getAllPossibleChampionAbilityEntryIdFormats()
+  // console.log('foramts', formats) // TEMP
+  // if ((() => true)()) return // TEMP
+
+  // analyzeEntryIds()
+  // if ((() => true)()) return // TEMP
 
 
-  const aatroxEntryIds = getEntryIdsByChampion('Aatrox', {ignoreTftIds: false})
-  const organized = organizeChampionEntryIds('Aatrox', aatroxEntryIds)
-  console.log('organized', organized) // TEMP
+
+
+
+  // for (const entryId in entries) {
+  //   const entryText: string = entries[entryId]!
+  //   if (entryText.toLowerCase().indexOf('naafiri') != -1) {
+  //     console.log(entryId) // TEMP
+  //   }
+  // }
+  // for (const entryId in entries) {
+  //   const entryText: string = entries[entryId]!
+  //   if (entryText.indexOf('naafiri') != -1) {
+  //     console.log(entryId) // TEMP
+  //   }
+  // }
+  // if ((() => true)()) return // TEMP
+
+  // analyzeEntryIds()
+  
+
+
+
+  
+  // const aatroxEntryIds = getEntryIdsByChampion('Aatrox', {ignoreTftIds: false})
+  // const organized = organizeChampionEntryIds('Aatrox', aatroxEntryIds)
+  // console.log('organized', organized) // TEMP
 
   //
   //
