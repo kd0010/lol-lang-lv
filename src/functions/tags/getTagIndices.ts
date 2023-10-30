@@ -1,4 +1,4 @@
-import { getIndicesOf } from '../../helpers/getIndicesOf'
+import { getIndicesOf } from 'rift-js-utils/string'
 import { getClosingTagIndex } from './getClosingTagIndex'
 
 /**

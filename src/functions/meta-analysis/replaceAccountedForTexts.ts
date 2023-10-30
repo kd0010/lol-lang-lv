@@ -1,5 +1,5 @@
+import { flipObj } from 'rift-js-utils/object'
 import { entries } from '../../constants/entries'
-import { flipStringObject } from '../../helpers/flipStringObject'
 import { AnalyzedTexts, StringtableEntries } from '../../types/types'
 import { stripEntryText } from '../stripEntryText'
 import { filterTranslateableTexts } from '../the-real-guns/filterTranslateableTexts'
@@ -32,9 +32,9 @@ export function replaceAccountedForTexts(
   }
 
   // filter stuff that isn't trasnlateable out
-  let [tltableModifiedEntries] = filterTranslateableTexts(flipStringObject(modifiedEntries))
+  let [tltableModifiedEntries] = filterTranslateableTexts(flipObj(modifiedEntries))
 
-  tltableModifiedEntries = flipStringObject(tltableModifiedEntries) // flip back
+  tltableModifiedEntries = flipObj(tltableModifiedEntries) // flip back
 
   // strip texts from tags etc. for easier viewing onto
   // what translateable texts have not been accounted for
