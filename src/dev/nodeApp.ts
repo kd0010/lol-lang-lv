@@ -3,6 +3,9 @@ import * as cors from 'cors'
 import { Sheets } from '../modules/lol-personal-db/src/objects/Sheets'
 import { Item, Champion } from 'lol-constants/assets'
 import { LvLangSheetNames, LvLangSpreadsheetId } from '../modules/lol-personal-db/src/constants/LvLangSpreadsheet'
+import { getChampionJson } from '../helpers/getChampionJson'
+import { getBasicChampTexts } from '../functions/getBasicChampTexts'
+import { basicChampTextsToSheetValues } from '../functions/basicChampTextsToSheetValues'
 
 // TEMP
 // config({path: '.env.local'})
@@ -15,31 +18,17 @@ app.use(cors())
 
 app.get('/sheets', async (req, res) => {
   const sheets = new Sheets(LvLangSpreadsheetId)
+  
 
-  // TEMP
-  // const exampleData: any = [
-  //   {
-  //     'title_small': 123123123,
-  //     'title_tiel_eaK<Odpaw': 'yes',
-  //     'third_columun': 'oince upon a time es eys se',
-  //     'fourht': 'lorem ipsum',
-  //     'fift': '<div>FIRST ROW</div>',
-  //   },
-  //   {
-  //     'title_small': 321321321,
-  //     'title_tiel_eaK<Odpaw': 'no',
-  //     'third_columun': 'oince upon a time es eys se',
-  //     'fourht': 'lorem ipsum',
-  //     'fift': '<div>SECOND ROW</div>',
-  //   },
-  //   {
-  //     'title_small': 456456456,
-  //     'title_tiel_eaK<Odpaw': 'yes',
-  //     'third_columun': 'oince upon a time es eys se',
-  //     'fourht': 'lorem ipsum',
-  //     'fift': '<div>THIRD ROW</div>',
-  //   },
-  // ]
+  const basic = await getBasicChampTexts('Pyke')
+  // console.log('basic', basic) // TEMP
+
+  const values = basicChampTextsToSheetValues(basic)
+  console.log('values', values) // TEMP
+
+  await sheets.jsonArrayToSheet('Varoņu tulkojumi', values, {
+    skipHeadersRows: 1,
+  })
 
   // const schema = {
   //   'title_small': 'Title Smal',

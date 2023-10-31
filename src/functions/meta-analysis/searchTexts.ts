@@ -4,14 +4,12 @@
  */
 export function searchTexts(
   texts: string[],
-  regex: RegExp,
+  pattern: string | RegExp,
 ): string[] {
-  if (!regex.global) throw 'need global regex'
-
   let foundTexts: string[] = []
 
   for (const text of texts) {
-    const matches = text.match(new RegExp(regex, 'g'))
+    const matches = text.match(new RegExp(pattern, 'g'))
     if (matches == null) continue
     foundTexts.push(...matches)
   }
