@@ -75,3 +75,15 @@ export type TftEntryIdPart = typeof TftEntryIdParts[keyof typeof TftEntryIdParts
 export function isTftEntryIdPart(value: any): value is TftEntryIdPart {
   return typeof value == 'string' && value in TftEntryIdParts
 }
+
+export function isTftEntryId(entryId: string): boolean {
+  return (
+    (
+      entryId.includes('tft') ||
+      entryId.includes('companion') ||
+      entryId.includes('chibi')
+    ) && (
+      !entryId.includes('yuumipcompanionshipbuff') // exception
+    )
+  )
+}
