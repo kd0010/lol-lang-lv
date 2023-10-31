@@ -5,7 +5,7 @@ import {
 } from '../getEntryIdsByChampion'
 import { ChampionIds } from 'lol-constants'
 
-export function getEntryIdsForChampions(
+export function getEntryIdsForAllChampions(
   options?: GetEntryIdsByChampionOptions,
 ) {
   const product: {[champId: string]: ChampionEntryIds} = {}

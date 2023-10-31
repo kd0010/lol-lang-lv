@@ -1,15 +1,17 @@
-import { isTftEntryIdPart } from '../constants/TftEntryIdParts'
+import { isTftEntryId, isTftEntryIdPart } from '../constants/TftEntryIdParts'
 import { entries } from '../constants/entries'
 import { ChampionId, getChampionNameById } from 'lol-constants'
-import { Champion } from 'lol-constants/assets'
+import { getChampionJson } from '../helpers/getChampionJson'
 
-export function getEntryIdsByChampion(
+export async function getEntryIdsByChampion(
   championId: ChampionId,
   {
     ignoreTftIds=false,
     includeGeneratedTipIds=false,
   }: GetEntryIdsByChampionOptions={},
 ) {
+  throw 'fuck trying to organize by entry ids 💀💀☠️☠️☠️☠️☠️☠️'
+
   const entryIds: ChampionEntryIds = {
     name: [],
     title: [],
@@ -25,40 +27,33 @@ export function getEntryIdsByChampion(
     misc: [],
   }
   const lowercaseChampionId = championId.toLowerCase()
-  const abilities = {
-    p1: `${lowercaseChampionId}passive`,
-    p2: `${lowercaseChampionId}p`,
-    q: `${lowercaseChampionId}q`,
-    w: `${lowercaseChampionId}w`,
-    e: `${lowercaseChampionId}e`,
-    r: `${lowercaseChampionId}r`,
-  }
+  const abilitiesBySlot = ['q', 'w', 'e', 'r'] as const
 
   for (let entryId in entries) {
-    if (!entryId.includes(lowercaseChampionId)) continue
+    const entryText = entries[entryId]!
+
+    const includesChampId = entryId.includes(lowercaseChampionId)
+
+    if (false) {
+      if (!entryId.includes(lowercaseChampionId)) continue
+      if (!(
+        entryId.includes(lowercaseChampionId) ||
+        entryId.includes('bushwhack-type-stuff')
+      )) continue
+    }
+
+    // ignore generated
     if (!includeGeneratedTipIds && entryId.includes('generatedtip_')) continue
 
-    const entryText: string = entries[entryId]
     entryId = entryId.toLowerCase()
     const entryIdsParts = entryId.split('_')
-    const champ = Champion.data[championId]
-    Champion.data['Aatrox'].title
+    const champ = await getChampionJson(championId)
 
     // tft stuff
     if (entryIdsParts.some(isTftEntryIdPart)) {
       if (ignoreTftIds) continue
       
-      if (
-        (
-          entryId.includes('tft') ||
-          entryId.includes('companion') ||
-          entryId.includes('chibi')
-        ) && (
-          !entryId.includes('yuumipcompanionshipbuff') // exception
-        )
-      ) {
-        entryIds.tft.push(entryId)
-      }
+      if (isTftEntryId(entryId)) entryIds.tft.push(entryId)
 
       continue // if tft done, then entry done
     }
@@ -67,26 +62,61 @@ export function getEntryIdsByChampion(
       entryIds.name.push(entryId)
     } else if (entryText == champ.title) {
       entryIds.title.push(entryId)
-    } else if (entryIdsParts.some(part => part == 'spell')) {
-      if (entryId.includes(abilities.p1) || entryId.includes(abilities.p2)) {
-        entryIds.p.push(entryId)
-      } else if (entryId.includes(abilities.q)) {
-        entryIds.q.push(entryId)
-      } else if (entryId.includes(abilities.w)) {
-        entryIds.w.push(entryId)
-      } else if (entryId.includes(abilities.e)) {
-        entryIds.e.push(entryId)
-      } else if (entryId.includes(abilities.r)) {
-        entryIds.r.push(entryId)
-      } else {
-        entryIds.otherAbilityIds.push(entryId)
-      }
-    } else if (entryId.includes('skin')) {
+    } else if (includesChampId && entryId.includes('skin')) {
       entryIds.skins.push(entryId)
-    } else if (entryId.includes('stat_stone')) {
+    } else if (includesChampId && entryId.includes('stat_stone')) {
       entryIds.eternals.push(entryId)
+    } else if (entryIdsParts.some(part => part == 'spell')) {
+      // q, w, e, r
+      let qwerAdded = false
+      for (let spellSlot = 0; spellSlot < 4; spellSlot++) {
+        const spellLetter = abilitiesBySlot[spellSlot]!
+        const spell = champ.spells[spellSlot]
+        if (spell == null) throw 'spell undefined ?!'
+
+        const spellSt = 'spell_' + spell!.id.toLowerCase()
+        if (entryId.includes(spellSt)) {
+          entryIds[spellLetter].push(entryId)
+          qwerAdded = true
+          break
+        }
+      }
+      if (qwerAdded) continue
+
+      // passive
+      if (
+        entryId.includes(lowercaseChampionId + 'passive') ||
+        entryId.includes(lowercaseChampionId + 'p')
+      ) {
+        entryIds.p.push(entryId)
+      } else {
+        if (false) entryIds.otherAbilityIds.push(entryId)
+      }
+
+      if (false) {
+        const abilities = {
+          p1: `${lowercaseChampionId}passive`,
+          p2: `${lowercaseChampionId}p`,
+          q: `${lowercaseChampionId}q`,
+          w: `${lowercaseChampionId}w`,
+          e: `${lowercaseChampionId}e`,
+          r: `${lowercaseChampionId}r`,
+        }
+        if (entryId.includes(abilities.q)) {
+          entryIds.q.push(entryId)
+        } else if (entryId.includes(abilities.w)) {
+          entryIds.w.push(entryId)
+        } else if (entryId.includes(abilities.e)) {
+          entryIds.e.push(entryId)
+        } else if (entryId.includes(abilities.r)) {
+          entryIds.r.push(entryId)
+        } else {
+          // TEMP
+          // entryIds.otherAbilityIds.push(entryId)
+        }
+      }
     } else {
-      entryIds.misc.push(entryId)
+      if (false) entryIds.misc.push(entryId)
     }
   }
 
