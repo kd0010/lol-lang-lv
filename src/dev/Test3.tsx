@@ -14,9 +14,10 @@ import { getUniqueTextsThroughTags } from '../functions/the-real-guns/getUniqueT
 import { uniqueTexts1 } from './uniqueTexts1'
 import { getEntryIdsForAllChampions } from '../functions/meta-analysis/getEntryIdsForAllChampions'
 import { arrToObj } from 'rift-js-utils/array'
-import { organizeChampionEntryIds } from '../functions/organizeChampionEntryIds'
 import { getEntryIdsByChampion } from '../functions/getEntryIdsByChampion'
 import { Item } from 'lol-constants/assets'
+import { stripEntryText } from '../functions/stripEntryText'
+import { getAnnouncementTexts } from '../functions/the-real-guns/getAnnouncementTexts'
 
 interface Props {
   
@@ -30,6 +31,7 @@ export const Test3: FunctionComponent<Props> = ({
   //
   //
   //
+  if ((() => true)()) return // TEMP
 
   // const repeatingTexts1 = getRepeatingTextsThroughTags(entriesWithTags)
   // console.log('repeatingTexts1', repeatingTexts1) // TEMP

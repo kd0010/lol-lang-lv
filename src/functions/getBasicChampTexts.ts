@@ -40,7 +40,7 @@ export async function getBasicChampTexts(
       name: champ.spells[3]!.name,
       desc: champ.spells[3]!.tooltip,
     },
-    skins: champ.skins.map(({ name }) => name),
+    skins: champ.skins.map(({ name }) => name).filter(name => name != 'default'),
   }
 }
 

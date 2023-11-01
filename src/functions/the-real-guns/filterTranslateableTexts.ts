@@ -1,6 +1,5 @@
-import { wordsRegex } from '../../constants/regexes'
 import { isTftTag } from '../../constants/TftTags'
-import { stripEntryText } from '../stripEntryText'
+import { isTranslateableText } from '../isTranslateableText'
 import { getTags } from '../tags/getTags'
 
 export function filterTranslateableTexts<T>(
@@ -19,14 +18,9 @@ export function filterTranslateableTexts<T>(
       if (tags.some(isTftTag)) continue
     }
 
-    const strippedText = stripEntryText(text)
-
-    // Check whether it still has any real content left
-    const hasWords = wordsRegex.test(strippedText)
-
     const value = texts[text]!
 
-    if (hasWords) cleanTexts[text] = value
+    if (isTranslateableText(text)) cleanTexts[text] = value
     else dirtyTexts[text] = value
   }
 

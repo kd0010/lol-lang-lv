@@ -24,7 +24,7 @@ export function replaceAccountedForTexts(
       
       for (const entryId of analyzedText.occursInIds) {
         if (!(entryId in entries)) continue
-        const entryText = entries[entryId as keyof typeof entries]
+        const entryText = entries[entryId]!
         const modifiedEntryText = entryText.replaceAll(analyzedText.text, delChar)
         modifiedEntries[entryId] = modifiedEntryText
       }

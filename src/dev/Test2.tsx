@@ -13,7 +13,7 @@ import { getChampionJson } from '../helpers/getChampionJson'
 import { searchTexts } from '../functions/meta-analysis/searchTexts'
 import { flipObj } from 'rift-js-utils/object'
 import { getBasicChampTexts } from '../functions/getBasicChampTexts'
-import { basicChampTextsToSheetValues } from '../functions/basicChampTextsToSheetValues'
+import { getRepeatingPhrases } from '../functions/the-real-guns/getRepeatingPhrases'
 
 const champIds = Object.values(ChampionIds)
 
@@ -30,20 +30,8 @@ export const Test2: FunctionComponent<Props> = ({
   //
   //
 
-  
-  // for (const entryId in entries) {
-  //   const entryText: string = entries[entryId]!
-  //   if (entryText.toLowerCase().indexOf('naafiri') != -1) {
-  //     console.log(entryId) // TEMP
-  //   }
-  // }
-  // for (const entryId in entries) {
-  //   const entryText: string = entries[entryId]!
-  //   if (entryText.indexOf('naafiri') != -1) {
-  //     console.log(entryId) // TEMP
-  //   }
-  // }
-  // if ((() => true)()) return // TEMP
+  const repeatingPhrases = getRepeatingPhrases()
+  console.log('repeatingPhrases', repeatingPhrases) // TEMP
   
   //
   //
