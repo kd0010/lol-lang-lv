@@ -12,8 +12,10 @@ import { getMissingChampEntryIds } from '../functions/meta-analysis/getMissingCh
 import { getChampionJson } from '../helpers/getChampionJson'
 import { searchTexts } from '../functions/meta-analysis/searchTexts'
 import { flipObj } from 'rift-js-utils/object'
-import { getBasicChampTexts } from '../functions/getBasicChampTexts'
+import { AbilityTexts, getBasicChampTexts } from '../functions/getBasicChampTexts'
 import { getRepeatingPhrases } from '../functions/the-real-guns/getRepeatingPhrases'
+import { stripEntryText } from '../functions/stripEntryText'
+import { htmlCharacterEntityRegex } from '../constants/regexes'
 
 const champIds = Object.values(ChampionIds)
 
@@ -30,6 +32,32 @@ export const Test2: FunctionComponent<Props> = ({
   //
   //
 
+  // for (const champId of champIds) {
+  //   const basicChampTexts = await getBasicChampTexts(champId)
+    
+  //   const analyzeAbilityTexts = (abilityTexts: AbilityTexts) => {
+  //     let isDescIncluded = false
+  //     let isNameIncluded = false
+  //     for (const entryText of entryTexts) {
+  //       if (!entryText.includes(abilityTexts.desc)) throw 'name not found'
+  //     }
+  //     if (!isDescIncluded) throw `desc not found, ${abilityTexts.desc}`
+  //     if (!isNameIncluded) throw `name not found, ${abilityTexts.name}`
+  //   }
+
+  //   analyzeAbilityTexts(basicChampTexts.p)
+  //   analyzeAbilityTexts(basicChampTexts.q)
+  //   analyzeAbilityTexts(basicChampTexts.w)
+  //   analyzeAbilityTexts(basicChampTexts.e)
+  //   analyzeAbilityTexts(basicChampTexts.r)
+  // }
+  // if ((() => true)()) return // TEMP
+
+
+
+
+
+  // if ((() => true)()) return // TEMP
   const repeatingPhrases = getRepeatingPhrases()
   console.log('repeatingPhrases', repeatingPhrases) // TEMP
   
