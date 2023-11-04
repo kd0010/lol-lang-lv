@@ -1,4 +1,4 @@
-import { AnalyzedTexts, StringtableEntries } from '../types/types'
+import { AnalyzedTexts, StringtableEntries } from '../types/interfaces'
 
 /**
  * Turns `AnalyzedTexts` back to original `StringtableEntries` form.

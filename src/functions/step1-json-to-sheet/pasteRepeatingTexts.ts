@@ -1,17 +1,30 @@
 import { Sheets } from '../../modules/lol-personal-db/src/objects/Sheets'
 import { LvLangSheetNames, LvLangSpreadsheetId } from '../../modules/lol-personal-db/src/constants/LvLangSpreadsheet'
-import { AnalyzedTexts } from '../../types/types'
+import { AnalyzedText, AnalyzedTexts, RepeatingPhrases } from '../../types/interfaces'
 import { isTranslateableText } from '../isTranslateableText'
 
 export async function pasteRepeatingTexts(
   repeatingTexts: AnalyzedTexts,
+  repeatingPhrases: RepeatingPhrases={},
 ) {
   const sheets = new Sheets(LvLangSpreadsheetId)
 
-  const repeatingTextsDesc = Object.values(repeatingTexts).sort(({occurances: a}, {occurances: b}) => b - a)
+  const repeatingPhrasesArr = Object.entries(repeatingPhrases).map(([phrase, occurances]) => ({
+    text: phrase,
+    occurances,
+    occursInIds: [],
+    example: '—',
+  } satisfies AnalyzedText))
+
+  const repeatingTextsArr = Object.values(repeatingTexts).sort(({occurances: a}, {occurances: b}) => b - a)
+
+  const repeatingTextsAndPhrasesDsc = [
+    ...repeatingPhrasesArr,
+    ...repeatingTextsArr,
+  ].sort(({occurances: a}, {occurances: b}) => b - a)
 
   const values: (string | number)[][] = []
-  for (const analyzedText of repeatingTextsDesc) {
+  for (const analyzedText of repeatingTextsAndPhrasesDsc) {
     if (!isTranslateableText(analyzedText.text)) continue
 
     values.push([
@@ -19,7 +32,6 @@ export async function pasteRepeatingTexts(
       analyzedText.example,
       analyzedText.text,
       '',
-      JSON.stringify(analyzedText.occursInIds),
     ])
   }
 

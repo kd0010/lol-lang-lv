@@ -1,6 +1,6 @@
 import { flipObj } from 'rift-js-utils/object'
 import { entries } from '../../constants/entries'
-import { AnalyzedTexts, StringtableEntries } from '../../types/types'
+import { AnalyzedTexts, StringtableEntries } from '../../types/interfaces'
 import { stripEntryText } from '../stripEntryText'
 import { filterTranslateableTexts } from '../the-real-guns/filterTranslateableTexts'
 

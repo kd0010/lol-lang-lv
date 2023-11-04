@@ -9,7 +9,7 @@ import { getTags } from './tags/getTags'
 
 /**
  * Strips text from all the bullshit that is not translateable:
- * tags, %i's, @'s, {{vars}} etc.
+ * tags, %i's, \@'s, {{vars}} etc.
  */
 export function stripEntryText(
   text: string,

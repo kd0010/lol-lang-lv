@@ -1,4 +1,4 @@
-import { Stringtable } from '../../types/types'
+import { Stringtable } from '../../types/interfaces'
 
 export function getDifferencesBetweenStringtables(
   newStringtable: Stringtable,

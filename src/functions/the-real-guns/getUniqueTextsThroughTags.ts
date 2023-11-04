@@ -1,4 +1,4 @@
-import { AnalyzedTexts, StringtableEntries } from '../../types/types'
+import { AnalyzedTexts, StringtableEntries } from '../../types/interfaces'
 import { getClosingTagIndex } from '../tags/getClosingTagIndex'
 import { getDeepestTags } from '../tags/getDeepestTags'
 import { getParentTag } from '../tags/getParentTag'
@@ -65,7 +65,8 @@ export function getUniqueTextsThroughTags(
   for (const entryId in entriesWithTags) {
     const entryText = entriesWithTags[entryId]!
 
-    if (loadingCount == 0 || ++loadingCount % 1000 == 0) console.log(`${loadingCount} / ${entriesWithTagsLength}`) // TEMPDEV
+    if (loadingCount == 0 || loadingCount % 1000 == 0) console.log(`${loadingCount} / ${entriesWithTagsLength}`) // TEMPDEV
+    loadingCount++
 
     const deepestTags = getDeepestTags(entryText)
     for (const {

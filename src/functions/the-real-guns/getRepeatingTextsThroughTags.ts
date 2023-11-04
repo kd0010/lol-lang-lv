@@ -1,4 +1,4 @@
-import { StringtableEntries, AnalyzedTexts } from '../../types/types'
+import { StringtableEntries, AnalyzedTexts } from '../../types/interfaces'
 import { getEntryUniqueTags } from '../meta-analysis/getEntryUniqueTags'
 import { getClosingTagIndex } from '../tags/getClosingTagIndex'
 import { getParentTag } from '../tags/getParentTag'

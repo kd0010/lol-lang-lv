@@ -1,5 +1,5 @@
 import { entries } from '../../constants/entries'
-import { StringtableEntries } from '../../types/types'
+import { StringtableEntries } from '../../types/interfaces'
 
 export function getAnnouncementTexts(): StringtableEntries {
   const texts: StringtableEntries = {}

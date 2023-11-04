@@ -111,8 +111,7 @@ export async function getEntryIdsByChampion(
         } else if (entryId.includes(abilities.r)) {
           entryIds.r.push(entryId)
         } else {
-          // TEMP
-          // entryIds.otherAbilityIds.push(entryId)
+          if (false) entryIds.otherAbilityIds.push(entryId)
         }
       }
     } else {

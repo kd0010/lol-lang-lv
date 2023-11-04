@@ -1,5 +1,6 @@
 import { entries } from '../../constants/entries'
 import { htmlCharacterEntityRegex, wordsRegex } from '../../constants/regexes'
+import { RepeatingPhrases } from '../../types/interfaces'
 import { stripEntryText } from '../stripEntryText'
 import { writeFileSync } from 'fs'
 
@@ -7,11 +8,12 @@ import { writeFileSync } from 'fs'
  * !! WARNING — espensive operation; execution takes hours.
  */
 export function getRepeatingPhrases({
-  phraseWordAmountCap=5,
+  minPhraseWordAmount=2,
+  maxPhraseWordAmount=5,
   minOccurances=5,
   includeGeneratedTypeTexts=false,
 }: GetRepeatingPhrasesOptions={}) {
-  const phrases: {[phrase: string]: number} = {}
+  const phrases: RepeatingPhrases = {}
 
   const dev_analyzeWordLetters = (word: string) => {
     const safeChars = `&;'-óéüçíşãöğİáúèñ`
@@ -54,7 +56,8 @@ export function getRepeatingPhrases({
   for (const modifiedText of modifiedEntryTexts) {
     const words = modifiedText.split(' ')
 
-    if (loadingCount == 0 || loadingCount % 1000 == 0) console.log(`${loadingCount++} / ${modifiedEntryTexts.length}`)
+    if (loadingCount == 0 || loadingCount % 1000 == 0) console.log(`${loadingCount} / ${modifiedEntryTexts.length}`)
+    loadingCount++
 
     for (
       let baseWordIdx = 0;
@@ -62,7 +65,6 @@ export function getRepeatingPhrases({
       baseWordIdx++
     ) {
       let currentPhrase = ''
-      let currentPhraseArr: string[] = []
       let currentWordCount = 0
 
       for (
@@ -70,12 +72,13 @@ export function getRepeatingPhrases({
         nextWordIndex < words.length;
         nextWordIndex++
       ) {
-        if (++currentWordCount > phraseWordAmountCap) break
-
         const word = words[nextWordIndex]!
         if (currentPhrase != '') currentPhrase += ' '
         currentPhrase += word
-        currentPhraseArr.push(word)
+
+        ++currentWordCount
+        if (currentWordCount < minPhraseWordAmount) continue
+        if (currentWordCount > maxPhraseWordAmount) break
 
         if (phrases[currentPhrase] != null) continue // small (huge) optimization
 
@@ -102,7 +105,8 @@ export function getRepeatingPhrases({
 }
 
 export interface GetRepeatingPhrasesOptions {
-  phraseWordAmountCap?: number
+  minPhraseWordAmount?: number
+  maxPhraseWordAmount?: number
   minOccurances?: number
   includeGeneratedTypeTexts?: boolean
 }
